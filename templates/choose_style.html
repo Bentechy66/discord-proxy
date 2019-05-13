@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center_div">
+<h1>Set Token</h1><br/>
+<button onclick='setHackerManTheme()'>Set theme to Hackerman</button>
+<button onclick='removeTheme()'>Set theme to [No theme]</button>
+</div>
+{% endblock %}
+{% block end_of_body_scripts %}
+<script>
+function setHackerManTheme() {
+    setCookie("custom_css", "body{color: #00dd00~background-color: black~}", 365)
+    alert("theme set")
+}
+function removeTheme() {
+    setCookie("custom_css", "", 0)
+    alert("theme reset")
+}
+</script>
+{% endblock %}

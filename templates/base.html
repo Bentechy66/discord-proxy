@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <style>
+    * {
+        box-sizing: border-box;
+    }
+
+    #message_send_box {
+        display: flex;
+    }
+
+    #message_input {
+        display: inline-block;
+        width: 90%;
+        resize: none;
+    }
+
+    .send_button {
+        display: inline-block;
+        width: 10%;
+    }
+    </style>
+    <script src="https://code.jquery.com/jquery-3.4.1.min.js"></script>
+    <script>
+        // The following is from W3Schools, big up
+        function getCookie(cname) {
+            var name = cname + "=";
+            var decodedCookie = decodeURIComponent(document.cookie);
+            var ca = decodedCookie.split(';');
+            for(var i = 0; i <ca.length; i++) {
+            var c = ca[i];
+            while (c.charAt(0) == ' ') {
+                c = c.substring(1);
+            }
+            if (c.indexOf(name) == 0) {
+                return c.substring(name.length, c.length);
+            }
+            }
+            return "";
+        }
+
+        function setCookie(cname, cvalue, exdays) {
+            var d = new Date();
+            d.setTime(d.getTime() + (exdays*24*60*60*1000));
+            var expires = "expires="+ d.toUTCString();
+            document.cookie = cname + "=" + cvalue + ";" + expires + ";path=/";
+        }
+      </script>
+      <style id="custom_css">
+      
+      </style>
+      <script>
+        String.prototype.replaceAll = function(search, replacement) {
+            var target = this;
+            return target.replace(new RegExp(search, 'g'), replacement);
+        };
+          if (getCookie("custom_css")) {
+              $('#custom_css').html(getCookie("custom_css").replaceAll("~", ";"))
+          }
+      </script>
+{% block head %}
+{% endblock %}
+</head>
+<body>
+{% block content %}
+{% endblock %}
+{% block end_of_body_scripts %}
+{% endblock %}
+</body>

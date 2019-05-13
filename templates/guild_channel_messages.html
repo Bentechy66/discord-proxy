@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+{% block content %}
+<div id="messages_container"><i>Loading messages, please wait...</i></div>
+<div id="message_send_box"><textarea id='message_input' placeholder='Message'></textarea><button class='send_button' onclick='sendMessage()'>Send!</button></div>
+{% endblock %}
+{% block end_of_body_scripts %}
+<script>
+function updateMessages() {
+    $.post("/api/channel/{{ channel_id }}/messages", {token: getCookie("discord_token")}, function(response) {
+        if (response["message"] == "401: Unauthorized") {
+            console.log("Invalid token!")
+            document.location = "/set_token"
+        } else {
+            var messages_elem = "<div id='messages'>\n"
+            response = response.reverse() // TODO: Proper, ID-based, message noting system, not just reversing the array of 50
+            for (i = 0; i < response.length; i++) {
+                messages_elem += `<div class="message">${response[i]["author"]["username"]} - ${response[i]["content"]}</div>\n` // Build message element
+            }
+            messages_elem += "</div>"
+            $("#messages_container").html(messages_elem)
+            window.scrollTo(0,document.body.scrollHeight);
+        }
+    })
+}
+
+function sendMessage() {
+    var message_box = $('#message_input')
+    message_content = message_box.val()
+    message_box.val("")
+    $.post("/api/channel/{{ channel_id }}/send_message", {token: getCookie("discord_token"), "message": message_content}, function(response) {
+        if (response["message"] == "401: Unauthorized") {
+            console.log("Invalid token!")
+            document.location = "/set_token"
+        } else {
+            updateMessages()
+        }
+    })
+}
+setInterval(updateMessages, 5000)
+updateMessages()
+</script>
+{% endblock %}

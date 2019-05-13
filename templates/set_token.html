@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center_div">
+<h1>Set Token</h1><br/>
+<input id="token_set" placeholder="mfa.."></input><button onclick='handleSetToken();'>Set Token & Select Guild</button></div>
+</div>
+{% endblock %}
+{% block end_of_body_scripts %}
+<script>
+function handleSetToken() {
+    setCookie("discord_token", $("#token_set").val(), 365); // TODO: Validate token
+    document.location = `/select_guild`
+}
+</script>
+{% endblock %}

@@ -1,0 +1,28 @@
+{% extends 'base.html' %}
+{% block content %}
+<div class="center_div">
+<h1>Select Guild</h1><br/>
+<div id="guild_select"><i>Loading guilds, please wait...</i></div>
+</div>
+{% endblock %}
+{% block end_of_body_scripts %}
+<script>
+function handleSelectGuild() {
+    var guild_id = $('#guild_select_menu').find(":selected").attr("value");
+    document.location = `/guild/${guild_id}/select_channel`
+}
+$.post("/api/guilds", {token: getCookie("discord_token")}, function(response) {
+    if (response["message"] == "401: Unauthorized") {
+        console.log("Invalid token!")
+        document.location = "/set_token"
+    } else {
+        var select_element = "<select id='guild_select_menu'>\n"
+        for (i = 0; i < response.length; i++) {
+            select_element += `<option value="${response[i]["id"]}">${response[i]["name"]}</option>\n` // Build guild selection element
+        }
+        select_element += "</select><button onclick='handleSelectGuild();'>Next</button>"
+        $("#guild_select").html(select_element)
+    }
+})
+</script>
+{% endblock %}
